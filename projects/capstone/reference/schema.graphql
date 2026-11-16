@@ -1,0 +1,91 @@
+scalar DateTime
+
+enum ProductStatus {
+  DRAFT
+  ACTIVE
+  ARCHIVED
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  FULFILLED
+  CANCELLED
+}
+
+type Money {
+  amountMinor: String!
+  currency: String!
+}
+
+type Product {
+  id: ID!
+  sku: String!
+  name: String!
+  description: String
+  price: Money!
+  status: ProductStatus!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type User {
+  id: ID!
+  email: String!
+  name: String!
+}
+
+type OrderItem {
+  id: ID!
+  product: Product!
+  quantity: Int!
+  unitPrice: Money!
+}
+
+type Order {
+  id: ID!
+  status: OrderStatus!
+  customer: User!
+  items: [OrderItem!]!
+  createdAt: DateTime!
+}
+
+type ProductEdge {
+  cursor: String!
+  node: Product!
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
+  endCursor: String
+}
+
+type ProductConnection {
+  edges: [ProductEdge!]!
+  pageInfo: PageInfo!
+}
+
+input ProductFilter {
+  status: ProductStatus
+  search: String
+}
+
+input CreateProductInput {
+  sku: String!
+  name: String!
+  description: String
+  amountMinor: String!
+  currency: String!
+}
+
+type Query {
+  me: User
+  product(id: ID!): Product
+  products(first: Int! = 20, after: String, filter: ProductFilter): ProductConnection!
+  order(id: ID!): Order
+}
+
+type Mutation {
+  createProduct(input: CreateProductInput!): Product!
+  archiveProduct(id: ID!): Product!
+}
