@@ -20,12 +20,11 @@ Variables:
 {
   "input": {
     "email": "customer@example.com",
-    "name": "Example Customer",
-    "role": "CUSTOMER"
+    "name": "Example Customer"
   }
 }
 ```
 
 Other mutations: `updateCustomer(id, input)`, `deleteCustomer(id)`.
 
-Email is normalized to lowercase. Tenant scope is server-owned and temporary for this learning milestone; authentication and authorization replace it in a later phase. Customers referenced by orders cannot be deleted.
+Public customer creation always assigns the least-privileged `CUSTOMER` role. The GraphQL input cannot set or elevate a user's role. Tenant scope is server-owned and temporary for this learning milestone; authentication and authorization replace it in a later phase. Customers referenced by orders cannot be deleted.

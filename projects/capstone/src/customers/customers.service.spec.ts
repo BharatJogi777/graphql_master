@@ -25,9 +25,9 @@ describe('CustomersService', () => {
     });
   });
 
-  it('normalizes email and creates a customer in the demo tenant', async () => {
-    prisma.user.create.mockResolvedValue({ id: 'u1', email: 'user@example.com' });
-    await service.create({ email: 'USER@EXAMPLE.COM', name: 'User', role: 'CUSTOMER' as never });
+  it('normalizes email and creates a customer with the least-privileged role', async () => {
+    prisma.user.create.mockResolvedValue({ id: 'u1', email: 'user@example.com', role: 'CUSTOMER' });
+    await service.create({ email: 'USER@EXAMPLE.COM', name: 'User' });
     expect(prisma.user.create).toHaveBeenCalledWith({
       data: { tenantId: DEMO_TENANT_ID, email: 'user@example.com', name: 'User', role: 'CUSTOMER' },
     });

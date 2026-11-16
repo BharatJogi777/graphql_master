@@ -114,7 +114,7 @@ describe('Catalog GraphQL API (e2e)', () => {
       });
   });
 
-  it('creates a customer through GraphQL', async () => {
+  it('creates a customer through GraphQL without accepting a role override', async () => {
     prismaMock.user.create.mockResolvedValue({
       id: 'customer-1',
       tenantId: 'demo-tenant',
@@ -132,7 +132,6 @@ describe('Catalog GraphQL API (e2e)', () => {
           input: {
             email: 'CUSTOMER@example.com',
             name: 'Example Customer',
-            role: 'CUSTOMER',
           },
         },
       })

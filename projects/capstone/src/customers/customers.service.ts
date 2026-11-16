@@ -1,5 +1,5 @@
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { Prisma, UserRole } from '@prisma/client';
 import { DEMO_TENANT_ID } from '../common/tenant-scope';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateCustomerInput, UpdateCustomerInput } from './customer.types';
@@ -30,7 +30,8 @@ export class CustomersService {
           tenantId: DEMO_TENANT_ID,
           email: input.email.toLowerCase(),
           name: input.name,
-          role: input.role,
+          // Public customer creation must never grant an elevated role.
+          role: UserRole.CUSTOMER,
         },
       });
     } catch (error) {
@@ -45,7 +46,6 @@ export class CustomersService {
     const data: Prisma.UserUpdateManyMutationInput = {
       ...(input.email !== undefined ? { email: input.email.toLowerCase() } : {}),
       ...(input.name !== undefined ? { name: input.name } : {}),
-      ...(input.role !== undefined ? { role: input.role } : {}),
     };
     try {
       const result = await this.prisma.user.updateMany({
