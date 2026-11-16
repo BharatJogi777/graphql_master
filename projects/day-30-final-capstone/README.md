@@ -8,7 +8,7 @@ Bring schema design, mutations, idempotency, tenant scoping, pagination bounds, 
 npm install
 npm test
 npm run typecheck
-npm run
+npm start
 ```
 
 Server listens on port 4000 by default. GraphQL endpoint is `POST /graphql`; health endpoints are `/health/live` and `/health/ready`.
