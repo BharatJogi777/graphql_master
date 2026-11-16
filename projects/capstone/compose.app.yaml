@@ -20,6 +20,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      target: deps
     command: ["npx", "prisma", "migrate", "deploy"]
     environment:
       NODE_ENV: production
@@ -33,6 +34,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      target: runtime
     restart: unless-stopped
     environment:
       NODE_ENV: production
