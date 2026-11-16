@@ -1,0 +1,85 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole { CUSTOMER ADMIN }
+enum ProductStatus { DRAFT ACTIVE ARCHIVED }
+enum OrderStatus { PENDING PAID CANCELLED FULFILLED }
+
+model Tenant {
+  id        String    @id @default(cuid())
+  name      String
+  createdAt DateTime  @default(now())
+  users     User[]
+  products  Product[]
+  orders    Order[]
+}
+
+model User {
+  id        String    @id @default(cuid())
+  tenantId  String
+  email     String
+  name      String
+  role      UserRole @default(CUSTOMER)
+  createdAt DateTime @default(now())
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  orders    Order[]
+
+  @@unique([tenantId, id])
+  @@unique([tenantId, email])
+  @@index([tenantId, createdAt])
+}
+
+model Product {
+  id             String        @id @default(cuid())
+  tenantId       String
+  sku            String
+  name           String
+  description    String?
+  priceMinor     BigInt
+  currency       String        @default("INR") @db.Char(3)
+  status         ProductStatus @default(DRAFT)
+  createdAt      DateTime      @default(now())
+  tenant         Tenant        @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  orderItems     OrderItem[]
+
+  @@unique([tenantId, id])
+  @@unique([tenantId, sku])
+  @@index([tenantId, status, createdAt])
+}
+
+model Order {
+  id         String      @id @default(cuid())
+  tenantId   String
+  userId     String
+  status     OrderStatus @default(PENDING)
+  totalMinor BigInt
+  currency   String      @default("INR") @db.Char(3)
+  createdAt  DateTime    @default(now())
+  tenant     Tenant      @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  user       User        @relation(fields: [tenantId, userId], references: [tenantId, id], onDelete: Restrict)
+  items      OrderItem[]
+
+  @@unique([tenantId, id])
+  @@index([tenantId, createdAt])
+  @@index([tenantId, userId, createdAt])
+}
+
+model OrderItem {
+  id             String  @id @default(cuid())
+  tenantId       String
+  orderId        String
+  productId      String
+  quantity       Int
+  unitPriceMinor BigInt
+  order          Order   @relation(fields: [tenantId, orderId], references: [tenantId, id], onDelete: Cascade)
+  product        Product @relation(fields: [tenantId, productId], references: [tenantId, id], onDelete: Restrict)
+
+  @@index([tenantId, orderId])
+  @@index([tenantId, productId])
+}

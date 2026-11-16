@@ -1,39 +1,98 @@
-# Capstone — Multi-tenant Commerce GraphQL API
+# GraphQL Capstone API
 
-This is the shared domain reference for the course. It is a starting contract, not a finished server. Labs progressively implement the API and move responsibilities into production-grade modules.
+A progressive NestJS + Apollo Server + Prisma + PostgreSQL implementation for the 30-day GraphQL mastery curriculum.
 
-## Domain
-Tenants own users, products and orders. Users have CUSTOMER or ADMIN roles. Products have tenant-scoped unique SKUs, status and integer minor-unit prices. Orders contain items and status transitions.
+## Current implementation status
 
-## Files
-- reference/schema.graphql — SDL contract to evolve through the labs.
-- reference/prisma/schema.prisma — initial relational model.
-- compose.yaml — local PostgreSQL 16 dependency.
-- .env.example — local environment template (replace values; never commit a real .env).
+This directory now contains the first runnable application foundation:
 
-## Start the database
-From this directory:
+- NestJS 11 application bootstrap and validated environment configuration.
+- Apollo GraphQL module with code-first schema generation and an `apiStatus` query.
+- Prisma 6 service lifecycle integration and a PostgreSQL data model.
+- An initial SQL migration with tenant-composite foreign keys that prevent cross-tenant order/user/product references.
+- Liveness and database-readiness endpoints with unit tests.
+- Docker image and a Compose stack for PostgreSQL + API.
+- Small local seed dataset.
+
+The commerce operations, authentication, authorization, DataLoader, pagination, query limits, and observability are deliberately implemented in later curriculum milestones. Do not treat this foundation as a complete production commerce API.
+
+## Requirements
+
+- Node.js 20+
+- npm
+- Docker Desktop (for PostgreSQL / Compose)
+
+## Local setup
 
 ```bash
 cp .env.example .env
-# Edit .env and set a strong local POSTGRES_PASSWORD.
-docker compose up -d postgres
-docker compose ps
+# Set a strong local POSTGRES_PASSWORD and matching DATABASE_URL in .env
+npm install
+npm run prisma:generate
+npm run prisma:migrate:deploy
+npm run db:seed
+npm run start:dev
 ```
 
-The database is exposed on localhost:5434. The example Prisma datasource reads DATABASE_URL. Keep the password in .env consistent with the URL.
+GraphQL endpoint: `http://localhost:3000/graphql`
 
-## Important implementation requirements
-1. The reference files are not a complete NestJS API. Add the application package, Prisma client generation, migrations, seed, resolvers, services and tests in the relevant daily labs.
-2. Enforce tenant scope in every read/write path. Do not trust tenant IDs from GraphQL inputs; derive tenant identity from verified request context.
-3. The initial relational model does not express every cross-tenant invariant as a composite foreign key. Add database-level constraints or ensure the repository query/transaction guarantees that an Order's User and Product rows belong to the same tenant. Test attempted cross-tenant references.
-4. Store money as integer minor units (BigInt in the database). Serialize BigInt as a string; do not use JavaScript floating point for monetary calculations.
-5. Add a transaction for order creation and status changes. Define allowed state transitions in domain services.
-6. Add deterministic keyset pagination, page-size limits, DataLoader, authorization, query-cost controls, logs, metrics and traces in their corresponding labs.
-7. Never commit real .env files, tokens, production data or generated secrets.
+Health endpoints:
+- `GET http://localhost:3000/api/health/live`
+- `GET http://localhost:3000/api/health/ready`
 
-## Suggested implementation order
-Days 7–10 establish the NestJS app, persistence, relations and DataLoader. Days 12–19 add compatibility, auth, tenancy, pagination, caching and query safety. Days 22–26 add events, tests, telemetry and deployment. Days 27–30 evaluate Federation and harden the whole system.
+Example GraphQL operation:
 
-## Local verification
-At this initial stage only the PostgreSQL Compose file is provided. There is not yet an API package or migration command in this folder. Do not claim the capstone is runnable end-to-end until those are added and tested.
+```graphql
+query {
+  apiStatus
+}
+```
+
+Expected data:
+
+```json
+{ "data": { "apiStatus": "GraphQL API is ready" } }
+```
+
+## Run PostgreSQL only
+
+The existing `compose.yaml` starts the database dependency. Start it from this directory:
+
+```bash
+docker compose -f compose.yaml up -d
+```
+
+Then run the application on the host using the local `DATABASE_URL`.
+
+## Run the full container stack
+
+Create `.env` with `POSTGRES_PASSWORD`, then:
+
+```bash
+docker compose --env-file .env -f compose.app.yaml up --build
+```
+
+The API container applies committed Prisma migrations before starting. The database port is bound to localhost only.
+
+## Quality checks
+
+```bash
+npm run typecheck
+npm test -- --runInBand
+npm run build
+```
+
+These commands are documented; they must be run in your environment before treating the current commit as verified.
+
+## Important engineering decisions
+
+- All monetary values are integer minor units (`priceMinor`, `totalMinor`); never use floating-point arithmetic for money.
+- Prisma represents PostgreSQL `BIGINT` as JavaScript `bigint`. GraphQL scalar serialization will be added with the money/product API milestone.
+- Tenant IDs must come from authenticated request context, not arbitrary client-supplied arguments.
+- Composite foreign keys ensure an order's user and each order item's product belong to the same tenant as the order.
+- Liveness does not depend on PostgreSQL. Readiness performs a database probe.
+- Introspection is configurable and should be disabled in production unless explicitly required.
+
+## Learning sequence
+
+Follow `../../docs/02-30-day-plan.md` and `../../docs/19-complete-implementation-blueprint.md`. Each later milestone will add one bounded capability with tests and an explanation.
