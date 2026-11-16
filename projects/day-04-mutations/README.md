@@ -1,36 +1,28 @@
-# Mutations and input design
+# Day 04 — Mutations and Input Objects
 
-> Status: implementation lab specification. Mark complete only after code and tests exist and have been run locally.
+## Goal
+Implement state-changing operations with input objects, enums, defaults and validation.
 
-## Objective
-Implement create, update and archive product mutations with input objects and enums.
+## Run
+```bash
+npm install
+npm test
+npm run typecheck
+npm run
+```
 
-## Deliverables
-Mutation resolvers, service methods, validation and mutation integration tests.
+## Study
+- Mutations are the schema entry point for writes.
+- Input object types are separate from output object types.
+- Required input fields use `!`; optional fields may be omitted or null when nullable.
+- Enum defaults are applied during input coercion.
+- GraphQL validates/coerces inputs before invoking the resolver.
 
-## Required acceptance evidence
-- [ ] Test success, duplicate SKU, not found, invalid input and idempotency; never accept arbitrary database fields.
-- [ ] Type-check and automated tests pass locally.
-- [ ] Setup, run, migration and test commands are documented.
-- [ ] No secrets, tokens or production data are committed.
-- [ ] Failure behavior and operational limits are documented.
+## Practice
+1. Add `updateProduct(id: ID!, input: UpdateProductInput!)`.
+2. Decide whether omitted and explicit-null descriptions mean the same thing.
+3. Add a domain validation error for negative prices.
+4. Add a test proving invalid input never changes the store.
 
-## Explain it back
-Explain input/output type separation, serial root mutation execution and transactional writes.
-
-## Suggested implementation sequence
-1. Read the matching lesson in the docs directory and draw the request/data flow.
-2. Implement the smallest working feature in this folder.
-3. Add success, validation, authorization and failure tests appropriate to the topic.
-4. Run the app and tests from a clean environment; record exact output and versions.
-5. Review security, performance, observability and trade-offs before marking complete.
-
-## Stack
-TypeScript, NestJS, Apollo, PostgreSQL, Prisma, DataLoader, Jest and Docker Compose as introduced by the curriculum. Use version-compatible dependencies and document deliberate alternatives.
-
-## Learning log
-- Implementation:
-- Tests run and result:
-- Design trade-offs:
-- Bugs found and fixed:
-- Remaining limitations:
+## Production note
+A GraphQL mutation is not automatically a database transaction. Use a transaction for multi-row invariants and enforce business rules in the service/domain layer too.

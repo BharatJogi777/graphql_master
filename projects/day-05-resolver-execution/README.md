@@ -1,36 +1,29 @@
-# Resolver execution internals
+# Day 05 — Resolver Execution and Parent Values
 
-> Status: implementation lab specification. Mark complete only after code and tests exist and have been run locally.
+## Goal
+Understand how GraphQL executes a selection tree and passes each resolved object to child-field resolvers.
 
-## Objective
-Implement root and nested resolvers; inspect parent, args, context and info; use default field resolver where appropriate.
+## Run
+```bash
+npm install
+npm test
+npm run typecheck
+npm run
+```
 
-## Deliverables
-Resolver tracing logger, nested relation resolvers and focused execution tests.
+## Study
+- A resolver receives `source/parent`, `args`, `context` and `info`.
+- Root resolvers begin at Query or Mutation fields.
+- A nested resolver receives the object returned by its parent field.
+- The default field resolver reads a property with the same name as the GraphQL field.
+- Only selected fields are included in the response; resolvers for unselected fields are not run.
+- Resolver execution can branch and sibling fields may execute concurrently.
 
-## Required acceptance evidence
-- [ ] Assert nested field resolution and context propagation; avoid business logic in resolver methods.
-- [ ] Type-check and automated tests pass locally.
-- [ ] Setup, run, migration and test commands are documented.
-- [ ] No secrets, tokens or production data are committed.
-- [ ] Failure behavior and operational limits are documented.
+## Practice
+1. Add `User.postCount` and calculate it without returning the full posts array.
+2. Add a `Post.excerpt` resolver that uses the title.
+3. Log parent IDs and explain why `Post.author` receives a Post, not a User.
+4. Add a missing-author fixture and observe non-null error propagation.
 
-## Explain it back
-Explain resolver chain, async results, default resolver and partial data.
-
-## Suggested implementation sequence
-1. Read the matching lesson in the docs directory and draw the request/data flow.
-2. Implement the smallest working feature in this folder.
-3. Add success, validation, authorization and failure tests appropriate to the topic.
-4. Run the app and tests from a clean environment; record exact output and versions.
-5. Review security, performance, observability and trade-offs before marking complete.
-
-## Stack
-TypeScript, NestJS, Apollo, PostgreSQL, Prisma, DataLoader, Jest and Docker Compose as introduced by the curriculum. Use version-compatible dependencies and document deliberate alternatives.
-
-## Learning log
-- Implementation:
-- Tests run and result:
-- Design trade-offs:
-- Bugs found and fixed:
-- Remaining limitations:
+## Production note
+Keep resolvers thin. Delegate persistence and business rules to services. Avoid putting request-specific state in module-level globals.
