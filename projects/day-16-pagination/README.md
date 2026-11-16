@@ -1,31 +1,29 @@
-# Day 16 — Pagination
+# Day 16 — Offset and Cursor Pagination
 
-> Status: scaffolded. Implement and test this lab during the matching lesson.
+## Goal
+Compare offset pagination with Relay-style cursor connections and understand stable ordering.
 
-## Objective
-Pagination.
+## Run
+```bash
+npm install
+npm test
+npm run typecheck
+npm run
+```
 
-## Hands-on deliverable
-**Offset and cursor comparison**
+## Study
+- Offset pagination is simple and useful for shallow pages, but large offsets can be expensive and inserts can shift page boundaries.
+- Cursor pagination continues from a stable ordering key and is generally better for feeds.
+- A connection contains edges, cursors and pageInfo.
+- Cursors should be opaque to clients and validated on input.
+- Always define deterministic ordering with a unique tie-breaker.
 
-Implement offset and cursor pagination; compare consistency and performance.
+## Practice
+1. Add backward pagination with `last` and `before`.
+2. Replace the in-memory array with a SQL query using `WHERE (created_at, id) < (...)`.
+3. Add a composite index matching the order/filter predicates.
+4. Test duplicate timestamps and concurrent inserts.
+5. Add filters and ensure the cursor is bound to the same filter/sort context.
 
-## Workflow
-1. Review the corresponding curriculum lesson and draw the data/execution flow.
-2. Implement the smallest working version in this folder.
-3. Add tests for success, invalid input and failure cases.
-4. Run type-checking, tests and the app locally.
-5. Record design trade-offs and exact run commands here.
-
-## Acceptance checklist
-- [ ] Typed implementation matches the objective.
-- [ ] Success and failure paths have automated tests.
-- [ ] No credentials or secrets are committed.
-- [ ] Local run and test commands are documented.
-- [ ] I can explain the design and trade-offs.
-
-## Stack direction
-TypeScript, NestJS, Apollo, PostgreSQL, Prisma, DataLoader, Jest and Docker Compose as introduced by the curriculum.
-
-## Learning notes
-Add bugs found, test evidence and your interview explanation here. Do not mark complete until you have run it locally.
+## Production note
+This lab uses an encoded ID cursor over a static dataset. A production cursor should represent the actual ordered position, include a unique tie-breaker, and be validated against filter/sort parameters. Do not use unbounded `first` values.
