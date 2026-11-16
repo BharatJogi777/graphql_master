@@ -23,19 +23,23 @@ The `docs/` directory contains the learning guide, syllabus, daily plan, fundame
 
 ## 30-day project workspace
 
-All 30 day folders are now scaffolded so the complete project path is visible upfront. Day 1 contains the runnable Apollo Server starter. Days 2–30 contain scoped lab READMEs, objectives and acceptance checklists; their implementations are filled in as we learn each topic. A scaffold is not a finished or tested application.
+The day folders are created upfront to make the curriculum visible. **A folder containing only a README is a lesson scaffold, not a runnable project.** The current executable labs are:
+
+- [Day 1 — GraphQL basics](projects/day-01-graphql-basics/README.md): Apollo Server, SDL, resolvers, in-memory data and execution tests.
+- [Day 10 — N+1 and DataLoader](projects/day-10-n-1-and-dataloader/README.md): standalone Apollo Server, request-scoped DataLoader, metrics and automated tests.
+- [Capstone API](projects/capstone/README.md): NestJS + Apollo + Prisma + PostgreSQL, Product/Customer/Order APIs, nested relationships, DataLoader and tests.
+
+Days 2–9, 11–30 still need their own runnable implementations. They are not being counted as completed merely because their folders and lesson notes exist. The capstone is also incomplete: authentication, authorization, pagination, query limits, caching, subscriptions, observability, real PostgreSQL integration tests and deployment hardening remain.
 
 | Days | Project focus |
 |---|---|
-| 1 | [GraphQL basics](projects/day-01-graphql-basics/README.md) — Apollo Server, SDL, resolvers, in-memory data and execution tests |
+| 1 | [GraphQL basics](projects/day-01-graphql-basics/README.md) |
 | 2–6 | SDL/types, queries, mutations, resolver execution, validation and errors |
 | 7–11 | NestJS/Apollo, PostgreSQL/Prisma, transactions, DataLoader, interfaces/unions/scalars |
 | 12–15 | Schema evolution, authentication, authorization/tenancy, validation and safe errors |
 | 16–21 | Pagination, Relay connections, caching, query safety, client code generation and client cache |
 | 22–26 | Subscriptions, subscription reliability, testing, observability, Docker and deployment |
 | 27–30 | Architecture decisions, Federation, capstone hardening and final demo/runbook |
-
-Browse the `projects/` directory for each day's README. Each lab includes its objective, deliverable and acceptance checklist.
 
 ## End-to-end outcome
 You should be able to explain the request lifecycle; design a schema; implement queries, mutations, nested resolvers and custom types; secure object and tenant access; solve N+1; implement cursor pagination and subscriptions; protect against expensive operations; test and observe the service; deploy it; and justify whether Federation is warranted.
@@ -45,7 +49,6 @@ A 30-day plan builds strong practical competence, not guaranteed mastery of ever
 ## Daily rhythm
 60 minutes concepts/diagrams, 120 minutes implementation, 60 minutes debugging and edge cases, 60 minutes tests/review/interview explanation. Commit each day's work and maintain a learning log.
 
+## Capstone implementation
 
-## Capstone reference implementation
-
-The `projects/capstone/` directory contains the shared multi-tenant commerce domain, GraphQL SDL reference, Prisma data model and local PostgreSQL Compose dependency. It is a starting reference, not a finished API. See [Capstone README](projects/capstone/README.md) and the [complete implementation blueprint](docs/19-complete-implementation-blueprint.md).
+The `projects/capstone/` directory is the shared multi-tenant commerce application used to connect the daily labs. See [Capstone README](projects/capstone/README.md), [implementation blueprint](docs/19-complete-implementation-blueprint.md), [Day 10 standalone lab](projects/day-10-n-1-and-dataloader/README.md) and the [completion evidence matrix](docs/18-completion-evidence-matrix.md).

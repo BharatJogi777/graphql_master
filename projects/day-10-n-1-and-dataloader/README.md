@@ -1,36 +1,71 @@
-# N+1 and DataLoader
+# Day 10 — N+1 and DataLoader
 
-> Status: implementation lab specification. Mark complete only after code and tests exist and have been run locally.
+This is a standalone, runnable GraphQL lab. It intentionally starts with an in-memory data source so you can isolate resolver execution and batching before introducing Prisma in the capstone.
 
-## Objective
-Reproduce N+1, measure query count, then batch relation loading using request-scoped DataLoaders.
+## Learning objectives
 
-## Deliverables
-Before/after query-count test, loader factory and resolver integration.
+- Reproduce the N+1 resolver pattern.
+- Understand why GraphQL executes nested resolvers independently.
+- Batch keys with DataLoader.
+- Preserve result order when database rows return in a different order.
+- Understand per-request caching and why a loader must not be global.
 
-## Required acceptance evidence
-- [ ] Batch results preserve input-key order; missing keys handled; no cross-request cache leakage.
-- [ ] Type-check and automated tests pass locally.
-- [ ] Setup, run, migration and test commands are documented.
-- [ ] No secrets, tokens or production data are committed.
-- [ ] Failure behavior and operational limits are documented.
+## Run
 
-## Explain it back
-Explain batching window, memoization, request scope and tenant-safe loader keys.
+Requirements: Node.js 20+.
 
-## Suggested implementation sequence
-1. Read the matching lesson in the docs directory and draw the request/data flow.
-2. Implement the smallest working feature in this folder.
-3. Add success, validation, authorization and failure tests appropriate to the topic.
-4. Run the app and tests from a clean environment; record exact output and versions.
-5. Review security, performance, observability and trade-offs before marking complete.
+```bash
+npm install
+npm run dev
+```
 
-## Stack
-TypeScript, NestJS, Apollo, PostgreSQL, Prisma, DataLoader, Jest and Docker Compose as introduced by the curriculum. Use version-compatible dependencies and document deliberate alternatives.
+Open the printed URL (normally `http://localhost:4000/`).
 
-## Learning log
-- Implementation:
-- Tests run and result:
-- Design trade-offs:
-- Bugs found and fixed:
-- Remaining limitations:
+First execute the posts query:
+
+```graphql
+query {
+  posts {
+    id
+    title
+    author { id name }
+  }
+}
+```
+
+Then execute the metrics query separately:
+
+```graphql
+query {
+  metrics {
+    userLookupCalls
+    userRowsRead
+  }
+}
+```
+
+Expected metrics for five posts and three distinct authors:
+
+- `userLookupCalls`: 1
+- `userRowsRead`: 3
+
+The naive implementation would look up the author separately for each post (up to five calls). DataLoader batches the author IDs and deduplicates repeated keys inside one request. Metrics are queried separately because GraphQL may execute sibling root fields concurrently.
+
+## Automated tests
+
+```bash
+npm test
+npm run typecheck
+```
+
+## Exercises
+
+1. Replace the DataLoader call in `src/schema.ts` with `users.find(user => user.id === post.authorId)`. Explain the database-call pattern this represents.
+2. Add a `postsByAuthorId` loader and a `User.posts` field.
+3. Write a test proving that the batch function returns values in the same order as requested IDs even when the source returns rows in a different order.
+4. Create two contexts and prove that their caches are independent.
+5. Explain why a process-global DataLoader is unsafe in a multi-tenant API.
+
+## Production connection
+
+See `../../capstone/src/loaders` for Prisma-backed, tenant-scoped request loaders and nested order resolvers. The capstone keeps loader instances inside the GraphQL request context.

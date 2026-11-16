@@ -1,6 +1,7 @@
 import { Field, ID, InputType, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { UserRole } from '@prisma/client';
 import { IsEmail, IsOptional, IsString, Length, MaxLength } from 'class-validator';
+import { Order } from '../orders/order.types';
 
 registerEnumType(UserRole, { name: 'UserRole' });
 
@@ -20,6 +21,9 @@ export class Customer {
 
   @Field()
   createdAt!: Date;
+
+  @Field(() => [Order])
+  orders!: Order[];
 }
 
 @InputType()

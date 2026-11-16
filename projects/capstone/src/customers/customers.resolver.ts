@@ -1,6 +1,8 @@
-import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Context, ID, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { Customer, CreateCustomerInput, UpdateCustomerInput } from './customer.types';
 import { CustomersService } from './customers.service';
+import { Order } from '../orders/order.types';
+import { GraphqlContext } from '../loaders/loaders.types';
 
 @Resolver(() => Customer)
 export class CustomersResolver {
@@ -32,5 +34,10 @@ export class CustomersResolver {
   @Mutation(() => Boolean)
   deleteCustomer(@Args('id', { type: () => ID }) id: string) {
     return this.customers.remove(id);
+  }
+
+  @ResolveField('orders', () => [Order])
+  orders(@Parent() customer: { id: string }, @Context() context: GraphqlContext) {
+    return context.loaders.ordersByCustomerId.load(customer.id);
   }
 }
