@@ -63,6 +63,9 @@ CREATE TABLE "OrderItem" (
   CONSTRAINT "OrderItem_order_same_tenant_fkey" FOREIGN KEY ("tenantId", "orderId") REFERENCES "Order"("tenantId", "id") ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT "OrderItem_product_same_tenant_fkey" FOREIGN KEY ("tenantId", "productId") REFERENCES "Product"("tenantId", "id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
+CREATE INDEX "User_tenant_createdAt_idx" ON "User"("tenantId", "createdAt");
 CREATE INDEX "Product_tenant_status_createdAt_idx" ON "Product"("tenantId", "status", "createdAt");
+CREATE INDEX "OrderItem_tenant_orderId_idx" ON "OrderItem"("tenantId", "orderId");
+CREATE INDEX "OrderItem_tenant_productId_idx" ON "OrderItem"("tenantId", "productId");
 CREATE INDEX "Order_tenant_createdAt_idx" ON "Order"("tenantId", "createdAt");
 CREATE INDEX "Order_tenant_user_createdAt_idx" ON "Order"("tenantId", "userId", "createdAt");
