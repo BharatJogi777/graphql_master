@@ -37,6 +37,14 @@ npm run start:dev
 
 GraphQL: `http://localhost:3000/graphql`
 
+To run the API and database as containers instead of starting NestJS on the host:
+
+```bash
+docker compose -f compose.app.yaml up --build
+```
+
+The Compose stack runs a one-shot migration container after PostgreSQL is healthy, then starts the non-root API container. The API image itself does not run migrations on every process start; use a dedicated migration Job/step in Kubernetes or another orchestrated production environment.
+
 Health:
 - `GET /api/health/live`
 - `GET /api/health/ready`
