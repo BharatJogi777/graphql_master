@@ -1,4 +1,5 @@
 import { composeServices } from "@apollo/composition";
+import { parse } from "graphql";
 
 export const catalogSdl = `
   extend schema @link(url: "https://specs.apollo.dev/federation/v2.7", import: ["@key"])
@@ -20,8 +21,9 @@ export const inventorySdl = `
 `;
 
 export function compose() {
+  // Apollo composition accepts parsed GraphQL documents, not raw SDL strings.
   return composeServices([
-    { name: "catalog", typeDefs: catalogSdl },
-    { name: "inventory", typeDefs: inventorySdl }
+    { name: "catalog", typeDefs: parse(catalogSdl) },
+    { name: "inventory", typeDefs: parse(inventorySdl) }
   ]);
 }
