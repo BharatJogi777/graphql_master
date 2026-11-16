@@ -23,9 +23,9 @@ export const schema = buildSchema(typeDefs);
 export const rootValue = {
   user: ({ id }: { id: string }) => users.find((user) => user.id === id) ?? null,
   users: () => users,
-  post: ({ id }: { id: string }) => posts.find((post) => post.id === id) ?? null,
-  Post: {
-    author: (post: (typeof posts)[number]) => users.find((user) => user.id === post.authorId) ?? null
+  post: ({ id }: { id: string }) => {
+    const post = posts.find((item) => item.id === id);
+    return post ? { ...post, author: users.find((user) => user.id === post.authorId) ?? null } : null;
   }
 };
 

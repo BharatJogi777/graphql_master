@@ -14,7 +14,7 @@ test("unknown fields are rejected by schema validation", () => {
 });
 
 test("wrong argument type is rejected during validation", () => {
-  const errors = validateDocument("{ product(id: 123) { id } }");
+  const errors = validateDocument("{ product(id: true) { id } }");
   assert.ok(errors.length > 0);
 });
 
