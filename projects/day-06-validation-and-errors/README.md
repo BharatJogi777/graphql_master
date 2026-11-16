@@ -1,36 +1,28 @@
-# Validation, execution and errors
+# Day 06 — Parsing, Validation, Coercion and Errors
 
-> Status: implementation lab specification. Mark complete only after code and tests exist and have been run locally.
+## Goal
+Separate GraphQL request processing into its distinct stages and design predictable errors.
 
-## Objective
-Separate parse, validation, variable coercion and execution errors; implement safe domain error mapping.
+## Run
+```bash
+npm install
+npm test
+npm run typecheck
+npm run
+```
 
-## Deliverables
-Malformed document tests, schema validation tests, variable coercion tests and execution error tests.
+## Request pipeline
+1. Parse the source document into an AST.
+2. Validate the AST against the schema (unknown fields, invalid arguments, fragment rules).
+3. Coerce variable values against declared GraphQL input types.
+4. Execute resolvers and complete the selected response tree.
+5. Serialize data and any execution errors.
 
-## Required acceptance evidence
-- [ ] Verify no resolver runs for invalid documents; verify partial data and error path for field failures.
-- [ ] Type-check and automated tests pass locally.
-- [ ] Setup, run, migration and test commands are documented.
-- [ ] No secrets, tokens or production data are committed.
-- [ ] Failure behavior and operational limits are documented.
+## Practice
+1. Add a query with an undefined variable and inspect the validation error.
+2. Pass a string where an Int is required and compare literal vs variable coercion.
+3. Add a resolver that throws and inspect partial data plus the error path.
+4. Return a GraphQLError with `extensions.code` and test the public error shape.
 
-## Explain it back
-Explain GraphQL errors array, data nullability and null bubbling.
-
-## Suggested implementation sequence
-1. Read the matching lesson in the docs directory and draw the request/data flow.
-2. Implement the smallest working feature in this folder.
-3. Add success, validation, authorization and failure tests appropriate to the topic.
-4. Run the app and tests from a clean environment; record exact output and versions.
-5. Review security, performance, observability and trade-offs before marking complete.
-
-## Stack
-TypeScript, NestJS, Apollo, PostgreSQL, Prisma, DataLoader, Jest and Docker Compose as introduced by the curriculum. Use version-compatible dependencies and document deliberate alternatives.
-
-## Learning log
-- Implementation:
-- Tests run and result:
-- Design trade-offs:
-- Bugs found and fixed:
-- Remaining limitations:
+## Production note
+Do not leak stack traces, SQL messages, tokens or internal hostnames to clients. Log detailed causes server-side and return stable, safe error codes.
