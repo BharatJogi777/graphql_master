@@ -1,36 +1,40 @@
-# PostgreSQL and Prisma
+# Day 08 — PostgreSQL and Prisma
 
-> Status: implementation lab specification. Mark complete only after code and tests exist and have been run locally.
+## Goal
+Connect a TypeScript application to PostgreSQL with Prisma, model data and implement a repository.
 
-## Objective
-Replace in-memory product/customer data with PostgreSQL persistence and Prisma migrations.
+## Start PostgreSQL
+```bash
+cp .env.example .env
+docker compose up -d
+npm install
+npm run db:generate
+npm run db:migrate -- --name init
+npm run db:seed
+```
 
-## Deliverables
-Prisma schema, migration, seed, repository/service boundary and integration tests.
+## Verify
+```bash
+npm test
+npm run typecheck
+npm run db:studio
+```
 
-## Required acceptance evidence
-- [ ] Fresh database migration and seed work; CRUD persists; DB unavailable behavior is safe.
-- [ ] Type-check and automated tests pass locally.
-- [ ] Setup, run, migration and test commands are documented.
-- [ ] No secrets, tokens or production data are committed.
-- [ ] Failure behavior and operational limits are documented.
+The database is exposed on host port **5437** to avoid colliding with a local PostgreSQL instance. Integration tests require the database to be running and migrated.
 
-## Explain it back
-Explain connection pooling, migrations, repository boundaries and raw SQL trade-offs.
+## Study
+- Prisma schema models map to relational tables; `@map` and `@@map` decouple TypeScript naming from SQL naming.
+- `@id`, `@unique`, indexes and enum values become database constraints or structures.
+- `findMany`, `findUnique`, `create` and `upsert` are generated from the schema.
+- Store money as integer minor units (for example, paise/cents), not floating-point values.
+- A repository hides persistence details from resolver code.
 
-## Suggested implementation sequence
-1. Read the matching lesson in the docs directory and draw the request/data flow.
-2. Implement the smallest working feature in this folder.
-3. Add success, validation, authorization and failure tests appropriate to the topic.
-4. Run the app and tests from a clean environment; record exact output and versions.
-5. Review security, performance, observability and trade-offs before marking complete.
+## Practice
+1. Add a Category model and a Product-to-Category relation.
+2. Add a database index for a real query you expect to run.
+3. Inspect the generated SQL migration and explain each statement.
+4. Use EXPLAIN ANALYZE against a larger fixture dataset.
+5. Add a unique-constraint test for duplicate SKUs.
 
-## Stack
-TypeScript, NestJS, Apollo, PostgreSQL, Prisma, DataLoader, Jest and Docker Compose as introduced by the curriculum. Use version-compatible dependencies and document deliberate alternatives.
-
-## Learning log
-- Implementation:
-- Tests run and result:
-- Design trade-offs:
-- Bugs found and fixed:
-- Remaining limitations:
+## Production note
+Use migrations in deployment, not `db push`. Keep secrets out of Git, size the connection pool, and use transactions for multi-step writes. Review indexes against actual query plans.
