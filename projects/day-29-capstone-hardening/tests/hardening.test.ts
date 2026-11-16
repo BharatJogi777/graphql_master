@@ -25,6 +25,11 @@ test("known safe error code is retained", () => {
   assert.deepEqual(result, { message: "Invalid input", extensions: { code: "BAD_USER_INPUT" } });
 });
 
+test("INTERNAL_SERVER_ERROR GraphQLErrors are sanitized even when explicitly coded", () => {
+  const result = publicGraphQLError(new GraphQLError("database password leaked", { extensions: { code: "INTERNAL_SERVER_ERROR" } }));
+  assert.deepEqual(result, { message: "An unexpected error occurred", extensions: { code: "INTERNAL_SERVER_ERROR" } });
+});
+
 test("unknown errors are sanitized", () => {
   const result = publicGraphQLError(new Error("postgres://secret-host/password"));
   assert.equal(result.message, "An unexpected error occurred");
