@@ -15,8 +15,8 @@ export class ProductsRepository {
   }
 
   create(input: { sku: string; name: string; description?: string | null; priceMinor: number; status?: ProductStatus }) {
-    if (!Number.isSafeInteger(input.priceMinor) || input.priceMinor < 0) {
-      throw new Error("priceMinor must be a non-negative safe integer");
+    if (!Number.isInteger(input.priceMinor) || input.priceMinor < 0 || input.priceMinor > 2_147_483_647) {
+      throw new Error("priceMinor must be a non-negative PostgreSQL Int value");
     }
     return this.prisma.product.create({ data: input });
   }
