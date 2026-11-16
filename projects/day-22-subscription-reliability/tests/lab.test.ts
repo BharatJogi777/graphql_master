@@ -22,11 +22,23 @@ test("expired replay window asks client to resynchronize", () => {
 test("live listener can unsubscribe", () => {
   const bus = new ReplayEventBus<{ value: number }>();
   const received: number[] = [];
-  const unsubscribe = bus.listen((event) => received.push(event.payload.value));
+  const unsubscribe = bus.listen("t", (event) => received.push(event.payload.value));
   bus.publish("t", "X", { value: 1 });
   unsubscribe();
   bus.publish("t", "X", { value: 2 });
   assert.deepEqual(received, [1]);
+});
+
+test("live listeners never receive another tenant's events", () => {
+  const bus = new ReplayEventBus<{ value: string }>();
+  const tenantA: string[] = [];
+  const tenantB: string[] = [];
+  bus.listen("tenant-a", (event) => tenantA.push(event.payload.value));
+  bus.listen("tenant-b", (event) => tenantB.push(event.payload.value));
+  bus.publish("tenant-a", "X", { value: "private-a" });
+  bus.publish("tenant-b", "X", { value: "private-b" });
+  assert.deepEqual(tenantA, ["private-a"]);
+  assert.deepEqual(tenantB, ["private-b"]);
 });
 
 test("event IDs are monotonically increasing", () => {
