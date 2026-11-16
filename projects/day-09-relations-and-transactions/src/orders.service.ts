@@ -25,7 +25,16 @@ export class OrdersService {
         where: { idempotencyKey: input.idempotencyKey },
         include: { items: true }
       });
-      if (existing) return existing;
+      if (existing) {
+        const requestedItems = [...input.items].sort((a, b) => a.productId.localeCompare(b.productId));
+        const storedItems = [...existing.items]
+          .map((item) => ({ productId: item.productId, quantity: item.quantity }))
+          .sort((a, b) => a.productId.localeCompare(b.productId));
+        const sameRequest = existing.customerId === input.customerId
+          && JSON.stringify(storedItems) === JSON.stringify(requestedItems);
+        if (!sameRequest) throw new Error("Idempotency key was reused with different order input");
+        return existing;
+      }
 
       const customer = await tx.customer.findUnique({ where: { id: input.customerId } });
       if (!customer) throw new Error("Customer not found");
@@ -41,7 +50,9 @@ export class OrdersService {
         totalMinor += product.priceMinor * item.quantity;
         return { productId: product.id, quantity: item.quantity, unitPriceMinor: product.priceMinor };
       });
-      if (!Number.isSafeInteger(totalMinor)) throw new Error("Order total exceeds safe integer range");
+      if (!Number.isInteger(totalMinor) || totalMinor < 0 || totalMinor > 2_147_483_647) {
+        throw new Error("Order total exceeds the PostgreSQL Int range");
+      }
 
       for (const item of input.items) {
         const updated = await tx.product.updateMany({
