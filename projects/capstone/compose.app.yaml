@@ -16,6 +16,19 @@ services:
       timeout: 3s
       retries: 15
 
+  migrate:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["npx", "prisma", "migrate", "deploy"]
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://graphql:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}@db:5432/graphql_capstone?schema=public
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: "no"
+
   api:
     build:
       context: .
@@ -29,8 +42,8 @@ services:
     ports:
       - "127.0.0.1:3000:3000"
     depends_on:
-      db:
-        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
 
 volumes:
   capstone_postgres_data:
