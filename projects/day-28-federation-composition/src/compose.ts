@@ -23,7 +23,7 @@ export const inventorySdl = `
 export function compose() {
   // Apollo composition accepts parsed GraphQL documents, not raw SDL strings.
   return composeServices([
-    { name: "catalog", typeDefs: parse(catalogSdl) },
-    { name: "inventory", typeDefs: parse(inventorySdl) }
+    { name: "catalog", url: "http://catalog:4001/graphql", typeDefs: parse(catalogSdl) },
+    { name: "inventory", url: "http://inventory:4002/graphql", typeDefs: parse(inventorySdl) }
   ]);
 }
