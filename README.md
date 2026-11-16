@@ -38,6 +38,14 @@ A practical engineering curriculum for a backend developer. The goal is to under
 | 15-glossary-and-references | Vocabulary and authoritative references |
 | 16-hands-on-practice-workbook | Thirty practical labs with acceptance evidence |
 
+## Incremental runnable projects
+
+Each learning phase has a companion project that you can clone, run, test and extend:
+
+- [Day 1 — GraphQL basics](projects/day-01-graphql-basics/README.md): Apollo Server, SDL, root and nested resolvers, in-memory data and execution tests.
+
+Projects are added incrementally as each topic is taught. Early projects intentionally stay small; NestJS, PostgreSQL, Prisma, authentication, DataLoader, security and deployment arrive in later stages.
+
 ## End-to-end outcome
 You should be able to explain the request lifecycle; design a schema; implement queries, mutations, nested resolvers and custom types; secure object and tenant access; solve N+1; implement cursor pagination and subscriptions; protect against expensive operations; test and observe the service; deploy it; and justify whether Federation is warranted.
 
