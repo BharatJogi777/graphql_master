@@ -15,6 +15,8 @@ A practical engineering curriculum for a backend developer. The goal is to under
 4. [30 hands-on practice labs](docs/16-hands-on-practice-workbook.md)
 5. [Capstone specification](docs/12-capstone-specification.md)
 6. [Production readiness checklist](docs/13-production-readiness-checklist.md)
+7. [Advanced GraphQL topics and production gaps](docs/17-advanced-graphql-topics.md)
+8. [Completion evidence and verification matrix](docs/18-completion-evidence-matrix.md)
 
 ## Repository map
 The `docs/` directory contains the learning guide, syllabus, daily plan, fundamentals, schema design, resolver execution, NestJS implementation, data access, security, client patterns, testing, architecture, capstone, readiness checklist, interview practice, glossary and workbook.
