@@ -1,6 +1,6 @@
 import { GraphQLError } from "graphql";
 
-const safeCodes = new Set(["BAD_USER_INPUT", "UNAUTHENTICATED", "FORBIDDEN", "NOT_FOUND", "CONFLICT", "INTERNAL_SERVER_ERROR"]);
+const safeCodes = new Set(["BAD_USER_INPUT", "UNAUTHENTICATED", "FORBIDDEN", "NOT_FOUND", "CONFLICT"]);
 
 export function publicGraphQLError(error: unknown) {
   if (error instanceof GraphQLError) {
