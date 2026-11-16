@@ -1,36 +1,35 @@
-# Relations and transactions
+# Day 09 — Relations and Transactions
 
-> Status: implementation lab specification. Mark complete only after code and tests exist and have been run locally.
+## Goal
+Model a customer-order-product graph and create an order with atomic inventory reservation and idempotency.
 
-## Objective
-Model customers, orders and order items; implement consistent multi-step order creation.
+## Start
+```bash
+cp .env.example .env
+docker compose up -d
+npm install
+npm run db:generate
+npm run db:migrate -- --name init
+npm run db:seed
+npm test
+npm run typecheck
+```
 
-## Deliverables
-Relational Prisma models, transaction service and integration tests.
+PostgreSQL uses host port **5438**. Integration tests require the database to be migrated.
 
-## Required acceptance evidence
-- [ ] Test rollback when a later write fails; enforce foreign keys and domain invariants.
-- [ ] Type-check and automated tests pass locally.
-- [ ] Setup, run, migration and test commands are documented.
-- [ ] No secrets, tokens or production data are committed.
-- [ ] Failure behavior and operational limits are documented.
+## Study
+- Customer has many Orders; Order has many OrderItems; each OrderItem references one Product.
+- `OrderItem.unitPriceMinor` snapshots the price at purchase time.
+- The service checks customer and products, reserves stock, and creates the order inside one serializable transaction.
+- Conditional `updateMany` prevents inventory from going negative under concurrent updates.
+- The unique idempotency key prevents retries from creating duplicate orders.
 
-## Explain it back
-Explain transaction isolation, atomicity and avoiding long-running transactions.
+## Practice
+1. Add a cancellation workflow that restores inventory exactly once.
+2. Add a maximum order quantity and test it.
+3. Simulate two concurrent orders competing for the last units.
+4. Handle Prisma serialization conflicts with bounded retries and jitter.
+5. Add an outbox row in the same transaction for reliable downstream events.
 
-## Suggested implementation sequence
-1. Read the matching lesson in the docs directory and draw the request/data flow.
-2. Implement the smallest working feature in this folder.
-3. Add success, validation, authorization and failure tests appropriate to the topic.
-4. Run the app and tests from a clean environment; record exact output and versions.
-5. Review security, performance, observability and trade-offs before marking complete.
-
-## Stack
-TypeScript, NestJS, Apollo, PostgreSQL, Prisma, DataLoader, Jest and Docker Compose as introduced by the curriculum. Use version-compatible dependencies and document deliberate alternatives.
-
-## Learning log
-- Implementation:
-- Tests run and result:
-- Design trade-offs:
-- Bugs found and fixed:
-- Remaining limitations:
+## Production note
+A transaction alone does not solve every concurrency problem. Use database constraints, conditional writes, idempotency keys and a deliberate retry policy. Never trust a price supplied by the client; calculate it from persisted product data.

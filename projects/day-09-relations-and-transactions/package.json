@@ -1,0 +1,11 @@
+{
+  "name": "day-09-relations-and-transactions",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=20" },
+  "scripts": { "db:generate": "prisma generate", "db:migrate": "prisma migrate dev", "db:seed": "tsx prisma/seed.ts", "test": "node --import tsx --test tests/*.test.ts", "typecheck": "tsc --noEmit" },
+  "prisma": { "seed": "tsx prisma/seed.ts" },
+  "dependencies": { "@prisma/client": "^6.5.0" },
+  "devDependencies": { "@types/node": "^22.13.10", "prisma": "^6.5.0", "tsx": "^4.19.3", "typescript": "^5.7.3" }
+}
