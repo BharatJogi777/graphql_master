@@ -1,36 +1,29 @@
-# Queries, variables and composition
+# Day 03 — Queries, Variables and Composition
 
-> Status: implementation lab specification. Mark complete only after code and tests exist and have been run locally.
+## Goal
+Write client operations using variables, aliases, fragments and multiple root fields.
 
-## Objective
-Implement list/detail/search queries with variables, aliases, fragments and operation naming.
+## Run
+```bash
+npm install
+npm test
+npm run typecheck
+npm run
+```
 
-## Deliverables
-GraphQL operation files; variable examples; query tests; README with response examples.
+## Study
+- Variables keep dynamic values out of query strings and are declared with GraphQL types.
+- Aliases change response property names, not schema field names.
+- Fragments reuse selections for a particular object type.
+- Multiple root fields let a client request related top-level resources in one operation.
+- `operationName` chooses one operation when a document contains more than one.
 
-## Required acceptance evidence
-- [ ] Test missing required variables, invalid IDs, aliases and reusable fragments; verify selected fields only appear.
-- [ ] Type-check and automated tests pass locally.
-- [ ] Setup, run, migration and test commands are documented.
-- [ ] No secrets, tokens or production data are committed.
-- [ ] Failure behavior and operational limits are documented.
+## Practice
+1. Add a query that accepts a list of user IDs and returns matching users.
+2. Use aliases to request the same field with different arguments.
+3. Create a fragment for Post and reuse it in two fields.
+4. Observe what happens when a required variable is omitted or has the wrong type.
+5. Inspect the GraphQL response shape and compare it with the selection set.
 
-## Explain it back
-Explain document vs operation, variables vs inline literals, and fragments.
-
-## Suggested implementation sequence
-1. Read the matching lesson in the docs directory and draw the request/data flow.
-2. Implement the smallest working feature in this folder.
-3. Add success, validation, authorization and failure tests appropriate to the topic.
-4. Run the app and tests from a clean environment; record exact output and versions.
-5. Review security, performance, observability and trade-offs before marking complete.
-
-## Stack
-TypeScript, NestJS, Apollo, PostgreSQL, Prisma, DataLoader, Jest and Docker Compose as introduced by the curriculum. Use version-compatible dependencies and document deliberate alternatives.
-
-## Learning log
-- Implementation:
-- Tests run and result:
-- Design trade-offs:
-- Bugs found and fixed:
-- Remaining limitations:
+## Production note
+Persisted operations and query allowlists can reduce arbitrary query exposure. Variables should be validated at the API boundary and never concatenated into query strings.

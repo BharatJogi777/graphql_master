@@ -1,36 +1,28 @@
-# SDL and type system
+# Day 02 — Schema Definition Language and Types
 
-> Status: implementation lab specification. Mark complete only after code and tests exist and have been run locally.
+## Goal
+Define a GraphQL contract with object types, enums, IDs, non-null fields and nullable fields.
 
-## Objective
-Build a Product Catalog schema with Product, User, ProductStatus, ProductFilter and Money/DateTime scalar design.
+## Run
+```bash
+npm install
+npm test
+npm run typecheck
+npm run
+```
 
-## Deliverables
-SDL definitions; schema construction; tests for valid/invalid scalar values; nullable/list combinations; schema documentation.
+## Study
+- `type` declares an object type; clients select fields from it.
+- `ID!` is a required identifier argument. `!` means non-null.
+- `String` is nullable. A nullable description can legitimately resolve to `null`.
+- Enums constrain inputs and outputs to a known set of values.
+- SDL describes the public contract; `rootValue` supplies root query resolvers in this small lab.
 
-## Required acceptance evidence
-- [ ] Test enum values, scalar parsing/serialization and list/null combinations; show null bubbling explicitly.
-- [ ] Type-check and automated tests pass locally.
-- [ ] Setup, run, migration and test commands are documented.
-- [ ] No secrets, tokens or production data are committed.
-- [ ] Failure behavior and operational limits are documented.
+## Practice
+1. Add a `category: String!` field to Product and populate every fixture.
+2. Add `productsByName(prefix: String!): [Product!]!`.
+3. Add a `ProductStatus` value and verify invalid enum values fail before resolver execution.
+4. Explain the difference between `[Product]`, `[Product!]`, `[Product!]!` and `[Product]!`.
 
-## Explain it back
-Explain how nullability changes client guarantees.
-
-## Suggested implementation sequence
-1. Read the matching lesson in the docs directory and draw the request/data flow.
-2. Implement the smallest working feature in this folder.
-3. Add success, validation, authorization and failure tests appropriate to the topic.
-4. Run the app and tests from a clean environment; record exact output and versions.
-5. Review security, performance, observability and trade-offs before marking complete.
-
-## Stack
-TypeScript, NestJS, Apollo, PostgreSQL, Prisma, DataLoader, Jest and Docker Compose as introduced by the curriculum. Use version-compatible dependencies and document deliberate alternatives.
-
-## Learning log
-- Implementation:
-- Tests run and result:
-- Design trade-offs:
-- Bugs found and fixed:
-- Remaining limitations:
+## Production note
+Do not expose database models directly as your GraphQL contract. Keep schema types intentional and document nullability as part of the API design.
