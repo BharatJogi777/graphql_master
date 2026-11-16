@@ -4,17 +4,19 @@ A progressive NestJS + Apollo Server + Prisma + PostgreSQL implementation for th
 
 ## Current implementation status
 
-This directory now contains the first runnable application foundation:
+Implemented foundation and first catalog slice:
 
-- NestJS 11 application bootstrap and validated environment configuration.
-- Apollo GraphQL module with code-first schema generation and an `apiStatus` query.
-- Prisma 6 service lifecycle integration and a PostgreSQL data model.
-- An initial SQL migration with tenant-composite foreign keys that prevent cross-tenant order/user/product references.
-- Liveness and database-readiness endpoints with unit tests.
-- Docker image and a Compose stack for PostgreSQL + API.
-- Small local seed dataset.
+- NestJS 11 bootstrap, validated environment configuration, and Apollo GraphQL.
+- Code-first GraphQL schema for products and customers (the Prisma `User` model).
+- Product and customer list/detail queries plus create/update/delete mutations.
+- Prisma-backed services with tenant-scoped queries and writes.
+- Input validation, duplicate SKU/email conflict handling, and safe deletion behavior.
+- Money represented as integer minor units and serialized as a string.
+- PostgreSQL migration with tenant-composite foreign keys.
+- Liveness/readiness endpoints, service unit tests, and GraphQL HTTP-level e2e tests with mocked persistence.
+- Docker image and Compose stacks for PostgreSQL-only or API + PostgreSQL.
 
-The commerce operations, authentication, authorization, DataLoader, pagination, query limits, and observability are deliberately implemented in later curriculum milestones. Do not treat this foundation as a complete production commerce API.
+**Security boundary:** this learning milestone uses a hard-coded `demo-tenant` scope so no client can choose another tenant. It is not production authentication. Do not deploy or expose this API publicly until JWT authentication, role authorization, rate limits, and tenant identity from a verified principal are implemented.
 
 ## Requirements
 
@@ -26,7 +28,8 @@ The commerce operations, authentication, authorization, DataLoader, pagination, 
 
 ```bash
 cp .env.example .env
-# Set a strong local POSTGRES_PASSWORD and matching DATABASE_URL in .env
+# Replace the sample password in POSTGRES_PASSWORD and DATABASE_URL with the same local password.
+docker compose -f compose.yaml up -d
 npm install
 npm run prisma:generate
 npm run prisma:migrate:deploy
@@ -40,29 +43,37 @@ Health endpoints:
 - `GET http://localhost:3000/api/health/live`
 - `GET http://localhost:3000/api/health/ready`
 
-Example GraphQL operation:
+## Example operations
 
 ```graphql
 query {
-  apiStatus
+  productsList { id sku name priceMinor currency status }
+  customersList { id email name role }
 }
 ```
 
-Expected data:
+```graphql
+mutation CreateProduct($input: CreateProductInput!) {
+  createProduct(input: $input) { id sku name priceMinor status }
+}
+```
+
+Variables:
 
 ```json
-{ "data": { "apiStatus": "GraphQL API is ready" } }
+{
+  "input": {
+    "sku": "SKU-100",
+    "name": "Wireless Keyboard",
+    "description": "Compact keyboard",
+    "priceMinor": "249900",
+    "currency": "INR",
+    "status": "ACTIVE"
+  }
+}
 ```
 
-## Run PostgreSQL only
-
-The existing `compose.yaml` starts the database dependency. Start it from this directory:
-
-```bash
-docker compose -f compose.yaml up -d
-```
-
-Then run the application on the host using the local `DATABASE_URL`.
+See `src/products/README.md` and `src/customers/README.md` for complete operations and design decisions.
 
 ## Run the full container stack
 
@@ -78,7 +89,8 @@ The API container applies committed Prisma migrations before starting. The datab
 
 ```bash
 npm run typecheck
-npm test -- --runInBand
+npm test
+npm run test:e2e
 npm run build
 ```
 
@@ -86,13 +98,13 @@ These commands are documented; they must be run in your environment before treat
 
 ## Important engineering decisions
 
-- All monetary values are integer minor units (`priceMinor`, `totalMinor`); never use floating-point arithmetic for money.
-- Prisma represents PostgreSQL `BIGINT` as JavaScript `bigint`. GraphQL scalar serialization will be added with the money/product API milestone.
-- Tenant IDs must come from authenticated request context, not arbitrary client-supplied arguments.
+- All monetary values are integer minor units. GraphQL accepts and returns a string to avoid 32-bit GraphQL Int and JavaScript floating-point precision problems.
+- Tenant ID is not a GraphQL argument or caller-controlled header. The temporary demo scope is server-owned and will be replaced with JWT principal scope in the authentication milestone.
 - Composite foreign keys ensure an order's user and each order item's product belong to the same tenant as the order.
 - Liveness does not depend on PostgreSQL. Readiness performs a database probe.
-- Introspection is configurable and should be disabled in production unless explicitly required.
+- Products referenced by order items and customers referenced by orders cannot be deleted.
+- Resolver classes map GraphQL operations to services; persistence and business rules remain in services.
 
 ## Learning sequence
 
-Follow `../../docs/02-30-day-plan.md` and `../../docs/19-complete-implementation-blueprint.md`. Each later milestone will add one bounded capability with tests and an explanation.
+Follow `../../docs/02-30-day-plan.md` and `../../docs/19-complete-implementation-blueprint.md`. Authentication, DataLoader, pagination, query safety, observability, and deployment hardening remain upcoming milestones.
