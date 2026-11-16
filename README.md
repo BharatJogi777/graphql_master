@@ -44,3 +44,8 @@ A 30-day plan builds strong practical competence, not guaranteed mastery of ever
 
 ## Daily rhythm
 60 minutes concepts/diagrams, 120 minutes implementation, 60 minutes debugging and edge cases, 60 minutes tests/review/interview explanation. Commit each day's work and maintain a learning log.
+
+
+## Capstone reference implementation
+
+The `projects/capstone/` directory contains the shared multi-tenant commerce domain, GraphQL SDL reference, Prisma data model and local PostgreSQL Compose dependency. It is a starting reference, not a finished API. See [Capstone README](projects/capstone/README.md) and the [complete implementation blueprint](docs/19-complete-implementation-blueprint.md).
