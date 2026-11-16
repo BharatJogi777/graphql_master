@@ -1,31 +1,36 @@
-# Day 11 — Interfaces, unions and scalars
+# Interfaces, unions and custom scalars
 
-> Status: scaffolded. Implement and test this lab during the matching lesson.
+> Status: implementation lab specification. Mark complete only after code and tests exist and have been run locally.
 
 ## Objective
-Interfaces, unions and scalars.
+Model search results with union/interface types and validate DateTime and Money scalar behavior.
 
-## Hands-on deliverable
-**Search result union and DateTime**
+## Deliverables
+Search resolver, __typename examples, scalar implementation and tests.
 
-Implement interface/union resolution and a validated DateTime scalar.
+## Required acceptance evidence
+- [ ] Test every union member, unknown scalar input, serialization and precision-safe money.
+- [ ] Type-check and automated tests pass locally.
+- [ ] Setup, run, migration and test commands are documented.
+- [ ] No secrets, tokens or production data are committed.
+- [ ] Failure behavior and operational limits are documented.
 
-## Workflow
-1. Review the corresponding curriculum lesson and draw the data/execution flow.
-2. Implement the smallest working version in this folder.
-3. Add tests for success, invalid input and failure cases.
-4. Run type-checking, tests and the app locally.
-5. Record design trade-offs and exact run commands here.
+## Explain it back
+Explain interface vs union, runtime type resolution and scalar boundaries.
 
-## Acceptance checklist
-- [ ] Typed implementation matches the objective.
-- [ ] Success and failure paths have automated tests.
-- [ ] No credentials or secrets are committed.
-- [ ] Local run and test commands are documented.
-- [ ] I can explain the design and trade-offs.
+## Suggested implementation sequence
+1. Read the matching lesson in the docs directory and draw the request/data flow.
+2. Implement the smallest working feature in this folder.
+3. Add success, validation, authorization and failure tests appropriate to the topic.
+4. Run the app and tests from a clean environment; record exact output and versions.
+5. Review security, performance, observability and trade-offs before marking complete.
 
-## Stack direction
-TypeScript, NestJS, Apollo, PostgreSQL, Prisma, DataLoader, Jest and Docker Compose as introduced by the curriculum.
+## Stack
+TypeScript, NestJS, Apollo, PostgreSQL, Prisma, DataLoader, Jest and Docker Compose as introduced by the curriculum. Use version-compatible dependencies and document deliberate alternatives.
 
-## Learning notes
-Add bugs found, test evidence and your interview explanation here. Do not mark complete until you have run it locally.
+## Learning log
+- Implementation:
+- Tests run and result:
+- Design trade-offs:
+- Bugs found and fixed:
+- Remaining limitations:
