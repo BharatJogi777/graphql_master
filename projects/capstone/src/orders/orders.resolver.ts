@@ -19,6 +19,11 @@ export class OrdersResolver {
     return this.orders.findById(id);
   }
 
+  @ResolveField('totalMinor', () => String)
+  totalMinor(@Parent() order: { totalMinor: bigint | string }) {
+    return order.totalMinor.toString();
+  }
+
   @ResolveField('customer', () => Customer)
   customer(@Parent() order: { userId: string }, @Context() context: GraphqlContext) {
     return context.loaders.customerById.load(order.userId);
