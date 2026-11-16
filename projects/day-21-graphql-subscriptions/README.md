@@ -8,7 +8,7 @@ Understand subscription operations as long-lived streams of execution results.
 npm install
 npm test
 npm run typecheck
-npm run
+npm run run
 ```
 
 ## Study
