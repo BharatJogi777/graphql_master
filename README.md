@@ -1,55 +1,73 @@
 # GraphQL Mastery — End-to-End, Production Engineering
 
-A practical engineering curriculum for a backend developer. The goal is to understand GraphQL internals, design stable schemas, implement secure and performant services, test them, deploy them and explain the trade-offs.
+A practical 30-day curriculum for a backend engineer. Learn GraphQL internals, schema design, resolver execution, security, performance, client integration, subscriptions, testing, observability, deployment and Federation through hands-on projects.
 
-## Study commitment
-- Target: 30 intensive days, about 5 focused hours/day (150 hours).
-- Stack: TypeScript, NestJS, Apollo, PostgreSQL, Prisma, DataLoader, tests and Docker Compose.
-- Method: concept → internals → runnable implementation → tests → failure cases → production trade-offs.
+## Stack
+TypeScript, GraphQL.js, NestJS, Apollo Server, Apollo Client, PostgreSQL, Prisma, DataLoader, Jest/Node test runner, Docker Compose and Kubernetes.
 
 ## Start here
 1. [Learning guide](docs/00-learning-guide.md)
 2. [Complete syllabus and coverage checklist](docs/01-syllabus-and-coverage.md)
 3. [30-day plan](docs/02-30-day-plan.md)
-4. [30 hands-on practice labs](docs/16-hands-on-practice-workbook.md)
+4. [Hands-on practice workbook](docs/16-hands-on-practice-workbook.md)
 5. [Capstone specification](docs/12-capstone-specification.md)
 6. [Production readiness checklist](docs/13-production-readiness-checklist.md)
-7. [Advanced GraphQL topics and production gaps](docs/17-advanced-graphql-topics.md)
-8. [Completion evidence and verification matrix](docs/18-completion-evidence-matrix.md)
+7. [Advanced GraphQL topics](docs/17-advanced-graphql-topics.md)
+8. [Completion evidence matrix](docs/18-completion-evidence-matrix.md)
 
-## 30-day project workspace
+## Daily runnable projects
 
-A folder containing only a README is a lesson scaffold, not a runnable project. Current daily project implementations:
+Each daily folder includes implementation files, tests and a README. Some labs are intentionally small in-memory examples to isolate one concept; database and deployment labs include their own infrastructure/configuration.
 
-- [Day 1 — GraphQL basics](projects/day-01-graphql-basics/README.md)
-- [Day 2 — SDL and types](projects/day-02-sdl-and-types/README.md)
-- [Day 3 — Queries and composition](projects/day-03-queries-and-composition/README.md)
-- [Day 4 — Mutations](projects/day-04-mutations/README.md)
-- [Day 5 — Resolver execution](projects/day-05-resolver-execution/README.md)
-- [Day 6 — Validation and errors](projects/day-06-validation-and-errors/README.md)
-- [Day 7 — NestJS and Apollo](projects/day-07-nestjs-and-apollo/README.md)
-- [Day 8 — PostgreSQL and Prisma](projects/day-08-postgresql-and-prisma/README.md)
-- [Day 9 — Relations and transactions](projects/day-09-relations-and-transactions/README.md)
-- [Day 10 — N+1 and DataLoader](projects/day-10-n-1-and-dataloader/README.md)
-- [Capstone API](projects/capstone/README.md): NestJS + Apollo + Prisma + PostgreSQL, catalog/customer/order APIs, nested relationships and request-scoped DataLoader.
-
-**Status:** Days 1–10 now have implementation files. Days 11–30 still need runnable implementations. The capstone remains in progress; authentication, authorization, pagination, query limits, caching, subscriptions, observability, real PostgreSQL integration tests and deployment hardening remain. Code has been committed incrementally, but the new projects still need to be installed and executed locally; do not treat a commit as a passing test report.
-
-## Remaining curriculum
-| Days | Project focus |
+| Day | Practical project |
 |---|---|
-| 11–15 | Interfaces/unions/scalars, schema evolution, authentication, authorization/tenancy, validation and safe errors |
-| 16–21 | Pagination, Relay connections, caching, query safety, client code generation and client cache |
-| 22–26 | Subscriptions, subscription reliability, testing, observability, Docker and deployment |
-| 27–30 | Architecture decisions, Federation, capstone hardening and final demo/runbook |
+| 1 | [GraphQL basics](projects/day-01-graphql-basics/README.md) |
+| 2 | [SDL and types](projects/day-02-sdl-and-types/README.md) |
+| 3 | [Queries and composition](projects/day-03-queries-and-composition/README.md) |
+| 4 | [Mutations](projects/day-04-mutations/README.md) |
+| 5 | [Resolver execution](projects/day-05-resolver-execution/README.md) |
+| 6 | [Validation and errors](projects/day-06-validation-and-errors/README.md) |
+| 7 | [NestJS and Apollo](projects/day-07-nestjs-and-apollo/README.md) |
+| 8 | [PostgreSQL and Prisma](projects/day-08-postgresql-and-prisma/README.md) |
+| 9 | [Relations and transactions](projects/day-09-relations-and-transactions/README.md) |
+| 10 | [N+1 and DataLoader](projects/day-10-n-1-and-dataloader/README.md) |
+| 11 | [Interfaces, unions and scalars](projects/day-11-interfaces-unions-and-scalars/README.md) |
+| 12 | [Schema evolution](projects/day-12-schema-evolution/README.md) |
+| 13 | [Authentication and context](projects/day-13-authentication-context/README.md) |
+| 14 | [Authorization and tenancy](projects/day-14-authorization-and-tenancy/README.md) |
+| 15 | [Input validation and safe errors](projects/day-15-input-validation-and-safe-errors/README.md) |
+| 16 | [Offset and cursor pagination](projects/day-16-pagination/README.md) |
+| 17 | [Caching and invalidation](projects/day-17-caching-and-cache-control/README.md) |
+| 18 | [Query depth and cost limits](projects/day-18-query-cost-and-depth-limits/README.md) |
+| 19 | [Operation code generation](projects/day-19-operation-codegen/README.md) |
+| 20 | [Apollo Client cache](projects/day-20-apollo-client-cache/README.md) |
+| 21 | [GraphQL subscriptions](projects/day-21-graphql-subscriptions/README.md) |
+| 22 | [Subscription reliability](projects/day-22-subscription-reliability/README.md) |
+| 23 | [GraphQL testing](projects/day-23-graphql-testing/README.md) |
+| 24 | [Observability and tracing](projects/day-24-observability-and-tracing/README.md) |
+| 25 | [Docker deployment](projects/day-25-docker-deployment/README.md) |
+| 26 | [Kubernetes production manifests](projects/day-26-kubernetes-production-manifests/README.md) |
+| 27 | [Federation subgraph](projects/day-27-federation-subgraph/README.md) |
+| 28 | [Federation composition](projects/day-28-federation-composition/README.md) |
+| 29 | [Capstone hardening](projects/day-29-capstone-hardening/README.md) |
+| 30 | [Final GraphQL capstone](projects/day-30-final-capstone/README.md) |
 
-## End-to-end outcome
-You should be able to explain the request lifecycle; design a schema; implement queries, mutations, nested resolvers and custom types; secure object and tenant access; solve N+1; implement cursor pagination and subscriptions; protect against expensive operations; test and observe the service; deploy it; and justify whether Federation is warranted.
+## Shared capstone
 
-A 30-day plan builds strong practical competence, not guaranteed mastery of every vendor-specific feature or real production incident. Keep practicing advanced federation and operations after the course.
+The [main capstone](projects/capstone/README.md) is the larger NestJS + Apollo + Prisma + PostgreSQL commerce API. It includes catalog/customer/order operations, nested relationships and request-scoped DataLoader. It is still an evolving project; use its README and [implementation blueprint](docs/19-complete-implementation-blueprint.md) for current scope.
 
-## Daily rhythm
-60 minutes concepts/diagrams, 120 minutes implementation, 60 minutes debugging and edge cases, 60 minutes tests/review/interview explanation. Commit each day's work and maintain a learning log.
+## How to study each day
+- Understand the concept and draw the request/data flow.
+- Install dependencies and run the tests.
+- Run the example and modify it.
+- Complete every practice exercise.
+- Add at least one failure-path test.
+- Explain the production trade-offs in your own words.
 
-## Capstone implementation
-The `projects/capstone/` directory is the shared multi-tenant commerce application used to connect the daily labs. See [Capstone README](projects/capstone/README.md), [implementation blueprint](docs/19-complete-implementation-blueprint.md), [Day 10 standalone lab](projects/day-10-n-1-and-dataloader/README.md) and the [completion evidence matrix](docs/18-completion-evidence-matrix.md).
+## Verification status
+
+The daily projects have been authored and committed incrementally. They have **not all been executed in a clean local environment** as part of these commits. Treat the tests as provided verification work to run locally—not as a claim that every project already passes. Some labs are intentionally educational rather than production-ready; each README calls out its scope and next production steps.
+
+## Completion target
+
+By the end, you should be able to design, implement, secure, test, optimize, observe and deploy a GraphQL service, and explain when a monolith, modular GraphQL API or federated architecture is appropriate. Thirty days is a structured intensive learning plan, not a guarantee of complete mastery; continue with real workloads, incident practice and deeper platform-specific work.

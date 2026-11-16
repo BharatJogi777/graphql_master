@@ -1,31 +1,31 @@
-# Day 29 — Capstone hardening
+# Day 29 — Capstone Production Hardening
 
-> Status: scaffolded. Implement and test this lab during the matching lesson.
+## Goal
+Make configuration fail fast, sanitize errors and define security/operational boundaries before release.
 
-## Objective
-Capstone hardening.
+## Run
+```bash
+npm install
+npm test
+npm run typecheck
+```
 
-## Hands-on deliverable
-**Load test, security review and failure injection**
+## Study
+- Validate environment variables at process startup.
+- Production secrets must meet strength requirements and never be logged.
+- CORS should be an explicit origin allowlist.
+- Public GraphQL errors should expose stable codes, not internal exception messages.
+- Security controls include auth, object/tenant authorization, query budgets, rate limits and request size limits.
 
-Run load/security checks, inject dependency failures and document bottlenecks.
+## Practice
+1. Add JWT issuer/audience config and validate them at startup.
+2. Add per-user and per-IP rate limiting.
+3. Add persisted operation allowlisting for trusted clients.
+4. Add dependency scanning, SBOM and secret scanning to release checks.
+5. Write incident runbooks for database outage, broker outage and elevated GraphQL error rate.
 
-## Workflow
-1. Review the corresponding curriculum lesson and draw the data/execution flow.
-2. Implement the smallest working version in this folder.
-3. Add tests for success, invalid input and failure cases.
-4. Run type-checking, tests and the app locally.
-5. Record design trade-offs and exact run commands here.
+## Release gate
+Do not ship until database migrations, rollback, backups/restore, alerting, trace correlation, secret rotation, authorization tests, query-cost limits and load tests have been reviewed.
 
-## Acceptance checklist
-- [ ] Typed implementation matches the objective.
-- [ ] Success and failure paths have automated tests.
-- [ ] No credentials or secrets are committed.
-- [ ] Local run and test commands are documented.
-- [ ] I can explain the design and trade-offs.
-
-## Stack direction
-TypeScript, NestJS, Apollo, PostgreSQL, Prisma, DataLoader, Jest and Docker Compose as introduced by the curriculum.
-
-## Learning notes
-Add bugs found, test evidence and your interview explanation here. Do not mark complete until you have run it locally.
+## Production note
+This lab validates configuration and sanitizes error output; it is not a complete security certification. Perform threat modeling and test every resolver/data-access path.
