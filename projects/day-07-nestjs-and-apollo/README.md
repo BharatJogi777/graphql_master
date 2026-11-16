@@ -1,36 +1,38 @@
-# NestJS and Apollo integration
+# Day 07 — NestJS and Apollo GraphQL
 
-> Status: implementation lab specification. Mark complete only after code and tests exist and have been run locally.
+## Goal
+Build a GraphQL HTTP server using NestJS code-first decorators and Apollo Server.
 
-## Objective
-Create a NestJS app with code-first or schema-first GraphQL; choose one approach and document trade-offs.
+## Run
+```bash
+npm install
+npm test
+npm run typecheck
+npm run start:dev
+```
+Open `http://localhost:3000/graphql` and run:
+```graphql
+query Catalog {
+  hello
+  products { id name priceMinor }
+  product(id: "p-1") { name }
+}
+```
 
-## Deliverables
-NestJS module, resolver, service, DTO/type definitions, config and e2e tests.
+Set `PORT=4000` to change the HTTP port.
 
-## Required acceptance evidence
-- [ ] App boots; GraphQL endpoint works; DI is used; config validated; graceful shutdown tested.
-- [ ] Type-check and automated tests pass locally.
-- [ ] Setup, run, migration and test commands are documented.
-- [ ] No secrets, tokens or production data are committed.
-- [ ] Failure behavior and operational limits are documented.
+## Study
+- `@ObjectType` and `@Field` define the GraphQL schema from TypeScript classes.
+- `@Resolver` groups field resolvers.
+- `@Query` exposes a read operation; `@Args` maps GraphQL arguments.
+- `GraphQLModule` configures the Apollo driver and generated schema.
+- Nest dependency injection manages resolver providers.
 
-## Explain it back
-Explain NestJS providers, resolver decorators, context factory and lifecycle.
+## Practice
+1. Add a ProductStatus enum and expose it on Product.
+2. Add a mutation with a dedicated `@InputType`.
+3. Move the in-memory catalog into a `ProductsService` and inject it.
+4. Add an e2e test that sends an HTTP GraphQL request to `/graphql`.
 
-## Suggested implementation sequence
-1. Read the matching lesson in the docs directory and draw the request/data flow.
-2. Implement the smallest working feature in this folder.
-3. Add success, validation, authorization and failure tests appropriate to the topic.
-4. Run the app and tests from a clean environment; record exact output and versions.
-5. Review security, performance, observability and trade-offs before marking complete.
-
-## Stack
-TypeScript, NestJS, Apollo, PostgreSQL, Prisma, DataLoader, Jest and Docker Compose as introduced by the curriculum. Use version-compatible dependencies and document deliberate alternatives.
-
-## Learning log
-- Implementation:
-- Tests run and result:
-- Design trade-offs:
-- Bugs found and fixed:
-- Remaining limitations:
+## Production note
+This is an educational in-memory server. Before production, add configuration validation, auth/context, input validation, rate limits, query complexity limits, structured logging and a persistence layer.
