@@ -47,6 +47,7 @@ CREATE TABLE "Order" (
   CONSTRAINT "Order_pkey" PRIMARY KEY ("id"),
   CONSTRAINT "Order_tenant_id_unique" UNIQUE ("tenantId", "id"),
   CONSTRAINT "Order_total_nonnegative" CHECK ("totalMinor" >= 0),
+  CONSTRAINT "Order_tenant_fkey" FOREIGN KEY ("tenantId") REFERENCES "Tenant"("id") ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT "Order_user_same_tenant_fkey" FOREIGN KEY ("tenantId", "userId") REFERENCES "User"("tenantId", "id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 CREATE TABLE "OrderItem" (
