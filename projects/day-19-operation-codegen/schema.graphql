@@ -1,0 +1,21 @@
+scalar DateTime
+
+enum ProductStatus {
+  DRAFT
+  ACTIVE
+  ARCHIVED
+}
+
+type Product {
+  id: ID!
+  sku: String!
+  name: String!
+  priceMinor: Int!
+  status: ProductStatus!
+  createdAt: DateTime!
+}
+
+type Query {
+  product(id: ID!): Product
+  products(status: ProductStatus, first: Int = 20): [Product!]!
+}

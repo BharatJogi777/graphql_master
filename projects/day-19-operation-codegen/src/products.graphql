@@ -1,0 +1,19 @@
+query Products($status: ProductStatus, $first: Int = 20) {
+  products(status: $status, first: $first) {
+    id
+    sku
+    name
+    priceMinor
+    status
+    createdAt
+  }
+}
+
+query ProductById($id: ID!) {
+  product(id: $id) {
+    id
+    name
+    priceMinor
+    status
+  }
+}
