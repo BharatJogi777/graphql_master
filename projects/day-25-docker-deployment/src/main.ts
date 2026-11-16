@@ -26,8 +26,13 @@ if (require.main === module) {
     const { app, server } = await createApp();
     const port = Number(process.env.PORT ?? 4000);
     const httpServer = app.listen(port, () => console.log(`Listening on :${port}/graphql`));
+    let shuttingDown = false;
     const shutdown = async () => {
-      httpServer.close();
+      if (shuttingDown) return;
+      shuttingDown = true;
+      await new Promise<void>((resolve, reject) => {
+        httpServer.close((error) => error ? reject(error) : resolve());
+      });
       await server.stop();
     };
     process.on("SIGTERM", shutdown);
