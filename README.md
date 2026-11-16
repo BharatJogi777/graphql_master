@@ -14,6 +14,7 @@ TypeScript, GraphQL.js, NestJS, Apollo Server, Apollo Client, PostgreSQL, Prisma
 6. [Production readiness checklist](docs/13-production-readiness-checklist.md)
 7. [Advanced GraphQL topics](docs/17-advanced-graphql-topics.md)
 8. [Completion evidence matrix](docs/18-completion-evidence-matrix.md)
+9. [Code review and verification status](docs/20-code-review-status.md)
 
 ## Daily runnable projects
 
