@@ -25,6 +25,7 @@ test("filters products by status", async () => {
   assert.ok(rows.every((row) => row.status === ProductStatus.ACTIVE));
 });
 
-test("rejects negative prices before database access", () => {
-  assert.throws(() => repository.create({ sku: "BAD-PRICE", name: "Invalid", priceMinor: -1 }), /non-negative/);
+test("rejects negative and out-of-range prices before database access", () => {
+  assert.throws(() => repository.create({ sku: "BAD-PRICE", name: "Invalid", priceMinor: -1 }), /PostgreSQL Int/);
+  assert.throws(() => repository.create({ sku: "TOO-LARGE", name: "Invalid", priceMinor: 2_147_483_648 }), /PostgreSQL Int/);
 });
