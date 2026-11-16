@@ -1,4 +1,4 @@
-import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, ID, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { Product, CreateProductInput, UpdateProductInput } from './product.types';
 import { ProductsService } from './products.service';
 
@@ -32,5 +32,12 @@ export class ProductsResolver {
   @Mutation(() => Boolean)
   deleteProduct(@Args('id', { type: () => ID }) id: string) {
     return this.products.remove(id);
+  }
+
+  // Loader results are raw Prisma rows (BigInt); service results are already
+  // strings. String() safely handles both paths and keeps the GraphQL contract stable.
+  @ResolveField('priceMinor', () => String)
+  priceMinor(@Parent() product: { priceMinor: bigint | string }) {
+    return product.priceMinor.toString();
   }
 }
