@@ -13,8 +13,9 @@ A practical engineering curriculum for a backend developer. The goal is to under
 1. [Learning guide](docs/00-learning-guide.md)
 2. [Complete syllabus and coverage checklist](docs/01-syllabus-and-coverage.md)
 3. [30-day plan](docs/02-30-day-plan.md)
-4. [Capstone specification](docs/12-capstone-specification.md)
-5. [Production readiness checklist](docs/13-production-readiness-checklist.md)
+4. [30 hands-on practice labs](docs/16-hands-on-practice-workbook.md)
+5. [Capstone specification](docs/12-capstone-specification.md)
+6. [Production readiness checklist](docs/13-production-readiness-checklist.md)
 
 ## Repository map
 | File | Contents |
@@ -35,6 +36,7 @@ A practical engineering curriculum for a backend developer. The goal is to under
 | 13-production-readiness-checklist | Release gates and runbook |
 | 14-interview-practice | Questions and scenario exercises |
 | 15-glossary-and-references | Vocabulary and authoritative references |
+| 16-hands-on-practice-workbook | Thirty practical labs with acceptance evidence |
 
 ## End-to-end outcome
 You should be able to explain the request lifecycle; design a schema; implement queries, mutations, nested resolvers and custom types; secure object and tenant access; solve N+1; implement cursor pagination and subscriptions; protect against expensive operations; test and observe the service; deploy it; and justify whether Federation is warranted.
