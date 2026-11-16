@@ -1,4 +1,3 @@
-
 # GraphQL Mastery — End-to-End, Production Engineering
 
 A practical engineering curriculum for a backend developer. The goal is to understand GraphQL internals, design stable schemas, implement secure and performant services, test them, deploy them and explain the trade-offs.
@@ -18,33 +17,23 @@ A practical engineering curriculum for a backend developer. The goal is to under
 6. [Production readiness checklist](docs/13-production-readiness-checklist.md)
 
 ## Repository map
-| File | Contents |
+The `docs/` directory contains the learning guide, syllabus, daily plan, fundamentals, schema design, resolver execution, NestJS implementation, data access, security, client patterns, testing, architecture, capstone, readiness checklist, interview practice, glossary and workbook.
+
+## 30-day project workspace
+
+All 30 day folders are now scaffolded so the complete project path is visible upfront. Day 1 contains the runnable Apollo Server starter. Days 2–30 contain scoped lab READMEs, objectives and acceptance checklists; their implementations are filled in as we learn each topic. A scaffold is not a finished or tested application.
+
+| Days | Project focus |
 |---|---|
-| 00-learning-guide | Study method, prerequisites and mastery gates |
-| 01-syllabus-and-coverage | Complete topic inventory and checklist |
-| 02-30-day-plan | Daily schedule and deliverables |
-| 03-graphql-fundamentals | GraphQL model, SDL, operations and lifecycle |
-| 04-schema-design | Types, nullability, schema evolution and design |
-| 05-execution-and-resolvers | Resolver execution, context and errors |
-| 06-nestjs-apollo-implementation | Project structure and implementation sequence |
-| 07-data-access-and-performance | N+1, DataLoader, SQL, caching and pagination |
-| 08-authentication-authorization-security | Identity, authorization and abuse prevention |
-| 09-client-pagination-subscriptions | Client cache, pagination and real-time |
-| 10-testing-observability | Testing, logs, metrics and tracing |
-| 11-advanced-architecture | BFF, gateways and Federation |
-| 12-capstone-specification | Commerce/order system requirements |
-| 13-production-readiness-checklist | Release gates and runbook |
-| 14-interview-practice | Questions and scenario exercises |
-| 15-glossary-and-references | Vocabulary and authoritative references |
-| 16-hands-on-practice-workbook | Thirty practical labs with acceptance evidence |
+| 1 | [GraphQL basics](projects/day-01-graphql-basics/README.md) — Apollo Server, SDL, resolvers, in-memory data and execution tests |
+| 2–6 | SDL/types, queries, mutations, resolver execution, validation and errors |
+| 7–11 | NestJS/Apollo, PostgreSQL/Prisma, transactions, DataLoader, interfaces/unions/scalars |
+| 12–15 | Schema evolution, authentication, authorization/tenancy, validation and safe errors |
+| 16–21 | Pagination, Relay connections, caching, query safety, client code generation and client cache |
+| 22–26 | Subscriptions, subscription reliability, testing, observability, Docker and deployment |
+| 27–30 | Architecture decisions, Federation, capstone hardening and final demo/runbook |
 
-## Incremental runnable projects
-
-Each learning phase has a companion project that you can clone, run, test and extend:
-
-- [Day 1 — GraphQL basics](projects/day-01-graphql-basics/README.md): Apollo Server, SDL, root and nested resolvers, in-memory data and execution tests.
-
-Projects are added incrementally as each topic is taught. Early projects intentionally stay small; NestJS, PostgreSQL, Prisma, authentication, DataLoader, security and deployment arrive in later stages.
+Browse the `projects/` directory for each day's README. Each lab includes its objective, deliverable and acceptance checklist.
 
 ## End-to-end outcome
 You should be able to explain the request lifecycle; design a schema; implement queries, mutations, nested resolvers and custom types; secure object and tenant access; solve N+1; implement cursor pagination and subscriptions; protect against expensive operations; test and observe the service; deploy it; and justify whether Federation is warranted.
