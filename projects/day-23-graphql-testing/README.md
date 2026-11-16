@@ -8,7 +8,7 @@ Build confidence with schema contract tests, operation tests, mutation tests and
 npm install
 npm test
 npm run typecheck
-npm run
+npm run run
 ```
 
 ## Study
