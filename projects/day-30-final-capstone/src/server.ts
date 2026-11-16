@@ -57,8 +57,16 @@ async function main() {
       response.writeHead(404); response.end(); return;
     }
     let body = "";
-    for await (const chunk of request) body += chunk;
-    if (body.length > 1_000_000) { response.writeHead(413); response.end(); return; }
+    let bodyTooLarge = false;
+    for await (const chunk of request) {
+      if (bodyTooLarge) continue;
+      body += chunk.toString();
+      if (Buffer.byteLength(body, "utf8") > 1_000_000) {
+        bodyTooLarge = true;
+        body = "";
+      }
+    }
+    if (bodyTooLarge) { response.writeHead(413); response.end(); return; }
     try {
       const payload = JSON.parse(body) as { query?: string; variables?: Record<string, unknown> };
       const result = await execute(payload.query ?? "", payload.variables, request.headers["x-tenant-id"]?.toString() ?? "tenant-demo");
