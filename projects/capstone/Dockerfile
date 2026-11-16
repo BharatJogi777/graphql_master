@@ -15,6 +15,7 @@ RUN npm run build
 # stages share the exact same resolved Prisma Client version.
 FROM deps AS prod-deps
 RUN npm prune --omit=dev
+COPY --from=deps /app/node_modules/.prisma ./node_modules/.prisma
 
 FROM node:20-alpine AS runtime
 ENV NODE_ENV=production
