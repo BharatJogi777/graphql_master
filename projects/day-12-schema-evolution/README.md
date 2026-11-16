@@ -1,31 +1,28 @@
-# Day 12 — Schema evolution
+# Day 12 — Schema Evolution and Compatibility
 
-> Status: scaffolded. Implement and test this lab during the matching lesson.
+## Goal
+Evolve a public GraphQL contract without unexpectedly breaking existing clients.
 
-## Objective
-Schema evolution.
+## Run
+```bash
+npm install
+npm test
+npm run typecheck
+npm run
+```
 
-## Hands-on deliverable
-**Deprecation and compatibility exercise**
+## Study
+- Additive nullable or safely defaulted fields are usually the least disruptive changes.
+- Deprecation communicates migration intent while preserving the old field temporarily.
+- A deprecated field remains executable until it is removed.
+- Removing or changing a field's type can break existing operations.
+- Compatibility should be checked against real client operations, not only schema diffs.
 
-Introduce a field safely, deprecate an old field and test backward compatibility.
+## Practice
+1. Add a deprecation to an old argument and introduce its replacement.
+2. Write a script that validates a directory of saved operations against the schema.
+3. Create a schema change report that classifies additive, dangerous and breaking changes.
+4. Define a sunset policy and telemetry requirement before removing deprecated fields.
 
-## Workflow
-1. Review the corresponding curriculum lesson and draw the data/execution flow.
-2. Implement the smallest working version in this folder.
-3. Add tests for success, invalid input and failure cases.
-4. Run type-checking, tests and the app locally.
-5. Record design trade-offs and exact run commands here.
-
-## Acceptance checklist
-- [ ] Typed implementation matches the objective.
-- [ ] Success and failure paths have automated tests.
-- [ ] No credentials or secrets are committed.
-- [ ] Local run and test commands are documented.
-- [ ] I can explain the design and trade-offs.
-
-## Stack direction
-TypeScript, NestJS, Apollo, PostgreSQL, Prisma, DataLoader, Jest and Docker Compose as introduced by the curriculum.
-
-## Learning notes
-Add bugs found, test evidence and your interview explanation here. Do not mark complete until you have run it locally.
+## Production note
+Use operation/client telemetry to prove a deprecated field is unused. Communicate migration windows and validate persisted operations before deployment.
