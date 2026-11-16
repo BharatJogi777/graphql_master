@@ -144,7 +144,7 @@ describe('Commerce GraphQL API (e2e)', () => {
     await request(app.getHttpServer())
       .post('/graphql')
       .send({
-        query: '{ ordersList { id totalMinor customer { name } items { quantity unitPriceMinor product { sku name } } } }',
+        query: '{ ordersList { id totalMinor customer { name } items { quantity unitPriceMinor product { sku name priceMinor } } } }',
       })
       .expect(200)
       .expect(({ body }) => {
@@ -153,7 +153,7 @@ describe('Commerce GraphQL API (e2e)', () => {
           id: 'order-1',
           totalMinor: '249900',
           customer: { name: 'Customer' },
-          items: [{ quantity: 1, unitPriceMinor: '249900', product: { sku: 'SKU-1', name: 'Keyboard' } }],
+          items: [{ quantity: 1, unitPriceMinor: '249900', product: { sku: 'SKU-1', name: 'Keyboard', priceMinor: '249900' } }],
         });
       });
 
