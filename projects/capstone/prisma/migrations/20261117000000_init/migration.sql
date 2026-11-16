@@ -27,14 +27,13 @@ CREATE TABLE "Product" (
   "name" TEXT NOT NULL,
   "description" TEXT,
   "priceMinor" BIGINT NOT NULL,
-  "currency" TEXT NOT NULL DEFAULT 'INR',
+  "currency" CHAR(3) NOT NULL DEFAULT 'INR',
   "status" "ProductStatus" NOT NULL DEFAULT 'DRAFT',
   "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT "Product_pkey" PRIMARY KEY ("id"),
   CONSTRAINT "Product_tenant_id_unique" UNIQUE ("tenantId", "id"),
   CONSTRAINT "Product_tenant_sku_key" UNIQUE ("tenantId", "sku"),
   CONSTRAINT "Product_price_nonnegative" CHECK ("priceMinor" >= 0),
-  CONSTRAINT "Product_currency_length" CHECK (char_length("currency") = 3),
   CONSTRAINT "Product_tenant_fkey" FOREIGN KEY ("tenantId") REFERENCES "Tenant"("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 CREATE TABLE "Order" (
@@ -43,7 +42,7 @@ CREATE TABLE "Order" (
   "userId" TEXT NOT NULL,
   "status" "OrderStatus" NOT NULL DEFAULT 'PENDING',
   "totalMinor" BIGINT NOT NULL,
-  "currency" TEXT NOT NULL DEFAULT 'INR',
+  "currency" CHAR(3) NOT NULL DEFAULT 'INR',
   "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT "Order_pkey" PRIMARY KEY ("id"),
   CONSTRAINT "Order_tenant_id_unique" UNIQUE ("tenantId", "id"),
