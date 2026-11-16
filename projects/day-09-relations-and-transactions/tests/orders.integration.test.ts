@@ -40,6 +40,15 @@ test("same idempotency key does not create a duplicate order", async () => {
   assert.equal(await prisma.order.count({ where: { idempotencyKey: key } }), 1);
 });
 
+test("rejects idempotency key reuse with different order input", async () => {
+  const key = `mismatch-${Date.now()}`;
+  await service.createOrder({ customerId, idempotencyKey: key, items: [{ productId, quantity: 1 }] });
+  await assert.rejects(
+    () => service.createOrder({ customerId, idempotencyKey: key, items: [{ productId, quantity: 2 }] }),
+    /different order input/,
+  );
+});
+
 test("rejects invalid quantities before opening a transaction", async () => {
   await assert.rejects(() => service.createOrder({ customerId, idempotencyKey: "invalid", items: [{ productId, quantity: 0 }] }), /positive integer/);
 });
