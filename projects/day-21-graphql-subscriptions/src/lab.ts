@@ -9,7 +9,7 @@ const schema = buildSchema(`
   type Subscription { commentAdded(postId: ID!): Comment! }
 `);
 const subscriptionField = schema.getSubscriptionType()!.getFields().commentAdded;
-subscriptionField.subscribe = ({ postId }: { postId: string }) => {
+subscriptionField.subscribe = (_source, { postId }: { postId: string }) => {
   let queue: CommentEvent[] = [];
   let waiting: Array<(result: IteratorResult<CommentEvent>) => void> = [];
   let closed = false;

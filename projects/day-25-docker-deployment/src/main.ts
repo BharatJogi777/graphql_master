@@ -7,10 +7,9 @@ const schema = buildSchema(`
   type Health { status: String!, timestamp: String! }
   type Query { health: Health!, hello: String! }
 `);
-const rootValue = {
-  health: () => ({ status: "ok", timestamp: new Date().toISOString() }),
-  hello: () => "Hello from a containerized GraphQL API"
-};
+const queryFields = schema.getQueryType()!.getFields();
+queryFields.health.resolve = () => ({ status: "ok", timestamp: new Date().toISOString() });
+queryFields.hello.resolve = () => "Hello from a containerized GraphQL API";
 
 export async function createApp() {
   const app = express();
